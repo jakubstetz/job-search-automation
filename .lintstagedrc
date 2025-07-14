@@ -1,0 +1,4 @@
+{
+  "**/*.{html,css,json,md,yaml,toml}": "npm run format",
+  "**/*.py": ".venv/bin/black"
+}
