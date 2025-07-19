@@ -7,5 +7,7 @@ exclude = '''
     \.venv
   | __pycache__
   | .DS_Store
+  | .dev
+  | archive
 )/
 '''
