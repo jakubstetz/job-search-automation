@@ -398,3 +398,256 @@ def servicenow(found_jobs: Set[str]) -> List[Dict]:
         print_error("ServiceNow", f"Error parsing ServiceNow response: {e}")
 
     return jobs
+
+
+# --------------------------------------------
+# NOT YET IMPLEMENTED
+# --------------------------------------------
+
+
+def workday(company: str, found_jobs: Set[str]) -> List[Dict]:
+    """
+    Scraper for Workday platform.
+
+    Args:
+        company: Name of company, already formatted for immediate use
+        found_jobs: Set containing URLs of previously found listings
+
+    Returns:
+        A list of new job listings for that company
+    """
+    print("🚧 WORKDAY SCRAPER NOT YET IMPLEMENTED 🚧")
+    return []
+
+
+def icims(company: str, found_jobs: Set[str]) -> List[Dict]:
+    """
+    Scraper for iCIMS platform.
+
+    Args:
+        company: Name of company, already formatted for immediate use
+        found_jobs: Set containing URLs of previously found listings
+
+    Returns:
+        A list of new job listings for that company
+    """
+    print("🚧 ICIMS SCRAPER NOT YET IMPLEMENTED 🚧")
+    return []
+
+
+def successfactors(company: str, found_jobs: Set[str]) -> List[Dict]:
+    """
+    Scraper for SuccessFactors platform.
+
+    Args:
+        company: Name of company, already formatted for immediate use
+        found_jobs: Set containing URLs of previously found listings
+
+    Returns:
+        A list of new job listings for that company
+    """
+    print("🚧 SUCCESSFACTORS SCRAPER NOT YET IMPLEMENTED 🚧")
+    return []
+
+
+def nc2(company: str, found_jobs: Set[str]) -> List[Dict]:
+    """
+    Scraper for NC2 platform.
+
+    Args:
+        company: Name of company, already formatted for immediate use
+        found_jobs: Set containing URLs of previously found listings
+
+    Returns:
+        A list of new job listings for that company
+    """
+    print("🚧 NC2 SCRAPER NOT YET IMPLEMENTED 🚧")
+    return []
+
+
+def jobvite(company: str, found_jobs: Set[str]) -> List[Dict]:
+    """
+    Scraper for Jobvite platform.
+
+    Args:
+        company: Name of company, already formatted for immediate use
+        found_jobs: Set containing URLs of previously found listings
+
+    Returns:
+        A list of new job listings for that company
+    """
+    print("🚧 JOBVITE SCRAPER NOT YET IMPLEMENTED 🚧")
+    return []
+
+
+def smartrecruiters(company: str, found_jobs: Set[str]) -> List[Dict]:
+    """
+    Scraper for SmartRecruiters platform.
+
+    Args:
+        company: Name of company, already formatted for immediate use
+        found_jobs: Set containing URLs of previously found listings
+
+    Returns:
+        A list of new job listings for that company
+    """
+    print("🚧 SMARTRECRUITERS SCRAPER NOT YET IMPLEMENTED 🚧")
+    return []
+
+
+def avature(company: str, found_jobs: Set[str]) -> List[Dict]:
+    """
+    Scraper for Avature platform.
+
+    Args:
+        company: Name of company, already formatted for immediate use
+        found_jobs: Set containing URLs of previously found listings
+
+    Returns:
+        A list of new job listings for that company
+    """
+    print("🚧 AVATURE SCRAPER NOT YET IMPLEMENTED 🚧")
+    return []
+
+
+def meta(found_jobs: Set[str]) -> List[Dict]:
+    """
+    Custom scraper for Meta.
+
+    Args:
+        found_jobs: Set containing URLs of previously found listings
+
+    Returns:
+        A list of new job listings for that company
+    """
+    print("🚧 META SCRAPER NOT YET IMPLEMENTED 🚧")
+    return []
+
+
+def google(found_jobs: Set[str]) -> List[Dict]:
+    """
+    Custom scraper for Google.
+
+    Args:
+        found_jobs: Set containing URLs of previously found listings
+
+    Returns:
+        A list of new job listings for that company
+    """
+    print("🚧 GOOGLE SCRAPER NOT YET IMPLEMENTED 🚧")
+    return []
+
+
+def wiz(found_jobs: Set[str]) -> List[Dict]:
+    """
+    Custom scraper for Wiz.
+
+    Args:
+        found_jobs: Set containing URLs of previously found listings
+
+    Returns:
+        A list of new job listings for that company
+    """
+    print("🚧 WIZ SCRAPER NOT YET IMPLEMENTED 🚧")
+    return []
+
+
+def apple(found_jobs: Set[str]) -> List[Dict]:
+    """
+    Custom scraper for Apple.
+
+    Args:
+        found_jobs: Set containing URLs of previously found listings
+
+    Returns:
+        A list of new job listings for that company
+    """
+    print("🚧 APPLE SCRAPER NOT YET IMPLEMENTED 🚧")
+    return []
+
+
+def amazon(found_jobs: Set[str]) -> List[Dict]:
+    """
+    Custom scraper for Amazon.
+
+    Args:
+        found_jobs: Set containing URLs of previously found listings
+
+    Returns:
+        A list of new job listings for that company
+    """
+    print("🚧 AMAZON SCRAPER NOT YET IMPLEMENTED 🚧")
+    return []
+
+
+def microsoft(found_jobs: Set[str]) -> List[Dict]:
+    """
+    Custom scraper for Microsoft.
+
+    Args:
+        found_jobs: Set containing URLs of previously found listings
+
+    Returns:
+        A list of new job listings for that company
+    """
+    print("🚧 MICROSOFT SCRAPER NOT YET IMPLEMENTED 🚧")
+    return []
+
+
+def hubspot(found_jobs: Set[str]) -> List[Dict]:
+    """
+    Custom scraper for HubSpot.
+
+    Args:
+        found_jobs: Set containing URLs of previously found listings
+
+    Returns:
+        A list of new job listings for that company
+    """
+    print("🚧 HUBSPOT SCRAPER NOT YET IMPLEMENTED 🚧")
+    return []
+
+
+def deloitte(found_jobs: Set[str]) -> List[Dict]:
+    """
+    Custom scraper for Deloitte.
+
+    Args:
+        found_jobs: Set containing URLs of previously found listings
+
+    Returns:
+        A list of new job listings for that company
+    """
+    print("🚧 DELOITTE SCRAPER NOT YET IMPLEMENTED 🚧")
+    return []
+
+
+def qualcomm(found_jobs: Set[str]) -> List[Dict]:
+    """
+    Custom scraper for Qualcomm.
+
+    Args:
+        found_jobs: Set containing URLs of previously found listings
+
+    Returns:
+        A list of new job listings for that company
+    """
+    print("🚧 QUALCOMM SCRAPER NOT YET IMPLEMENTED 🚧")
+    return []
+
+
+def peloton(found_jobs: Set[str]) -> List[Dict]:
+    """
+    Custom scraper for Peloton.
+
+    Args:
+        found_jobs: Set containing URLs of previously found listings
+
+    Returns:
+        A list of new job listings for that company
+    """
+    print("🚧 PELOTON SCRAPER NOT YET IMPLEMENTED 🚧")
+    return []
+
+
+# --------------------------------------------
