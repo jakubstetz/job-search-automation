@@ -19,7 +19,7 @@ from config import (
     INCLUDE_KEYWORDS,
     EXCLUDE_KEYWORDS,
 )
-from scrapers import lever, greenhouse, ashby
+from scrapers import lever, greenhouse, ashby, myworkdayjobs, myworkdaysite
 
 
 def scrape_tier(
@@ -56,7 +56,7 @@ def scrape_tier(
         print(f"\n{'- '*30}")
         try:
             # formatted_name not needed for custom scrapers
-            if scraper in [lever, greenhouse, ashby]:
+            if scraper in [lever, greenhouse, ashby, myworkdayjobs, myworkdaysite]:
                 jobs = scraper(formatted_name, found_jobs)
             else:
                 jobs = scraper(found_jobs)
