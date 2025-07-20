@@ -108,12 +108,3 @@ def print_debug(message: str) -> None:
 
     if LOG_LEVEL == "DEBUG":
         print(f"DEBUG: {message}")
-
-
-def clean_search_results() -> None:
-    """Clean old search results files (optional utility)."""
-    if SEARCH_RESULTS_DIR.exists():
-        for file in SEARCH_RESULTS_DIR.iterdir():
-            if file.is_file():
-                file.unlink()
-        print(f"Cleaned search results directory: {SEARCH_RESULTS_DIR}")
