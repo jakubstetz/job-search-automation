@@ -2,7 +2,8 @@ from scrapers import (
     greenhouse,
     lever,
     ashby,
-    workday,
+    myworkdayjobs,
+    myworkdaysite,
     icims,
     successfactors,
     nc2,
@@ -31,9 +32,9 @@ tier_1a = [
     {"name": "LinkedIn", "formatted_name": "linkedin", "scraper": linkedin},
     {"name": "Uber", "formatted_name": "uber", "scraper": uber},
     # https://salesforce.wd12.myworkdayjobs.com/External_Career_Site
-    {"name": "Salesforce", "formatted_name": "salesforce", "scraper": workday},
+    {"name": "Salesforce", "formatted_name": "salesforce", "scraper": myworkdayjobs},
     {"name": "Stripe", "formatted_name": "stripe", "scraper": greenhouse},
-    {"name": "NVIDIA", "formatted_name": "nvidia", "scraper": workday},
+    {"name": "NVIDIA", "formatted_name": "nvidia", "scraper": myworkdayjobs},
 ]
 
 tier_1b = [
@@ -63,7 +64,7 @@ tier_2a = [
     {"name": "Splunk", "formatted_name": "splunk", "scraper": jobvite},
     {"name": "Ramp", "formatted_name": "ramp", "scraper": ashby},
     # https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers
-    {"name": "CrowdStrike", "formatted_name": "crowdstrike", "scraper": workday},
+    {"name": "CrowdStrike", "formatted_name": "crowdstrike", "scraper": myworkdayjobs},
     {
         "name": "Palo Alto Networks",
         "formatted_name": "paloaltonetworks2",
@@ -73,7 +74,7 @@ tier_2a = [
     {"name": "Elastic", "formatted_name": "elastic", "scraper": greenhouse},
     {"name": "ServiceNow", "formatted_name": "servicenow", "scraper": smartrecruiters},
     # https://capitalone.wd12.myworkdayjobs.com/Capital_One
-    {"name": "Capital One", "formatted_name": "capitalone", "scraper": workday},
+    {"name": "Capital One", "formatted_name": "capitalone", "scraper": myworkdayjobs},
     {
         "name": "Anduril Industries",
         "formatted_name": "andurilindustries",
@@ -91,9 +92,9 @@ tier_2b = [
     {"name": "Atlassian", "formatted_name": "apac-atlassian", "scraper": icims},
     {"name": "Twilio", "formatted_name": "twilio", "scraper": greenhouse},
     # https://zillow.wd5.myworkdayjobs.com/Zillow_Group_External
-    {"name": "Zillow", "formatted_name": "zillow", "scraper": workday},
+    {"name": "Zillow", "formatted_name": "zillow", "scraper": myworkdayjobs},
     # https://etsy.wd5.myworkdayjobs.com/Etsy_Careers
-    {"name": "Etsy", "formatted_name": "etsy", "scraper": workday},
+    {"name": "Etsy", "formatted_name": "etsy", "scraper": myworkdayjobs},
     {"name": "Instacart", "formatted_name": "instacart", "scraper": greenhouse},
     {"name": "Coursera", "formatted_name": "coursera", "scraper": greenhouse},
     {"name": "MongoDB", "formatted_name": "mongodb", "scraper": greenhouse},
@@ -105,13 +106,13 @@ tier_2b = [
     {"name": "Palantir", "formatted_name": "palantir", "scraper": lever},
     {"name": "Bloomberg", "formatted_name": "bloomberg", "scraper": avature},
     # https://cohesity.wd5.myworkdayjobs.com/Cohesity_Careers/
-    {"name": "Cohesity", "formatted_name": "cohesity", "scraper": workday},
+    {"name": "Cohesity", "formatted_name": "cohesity", "scraper": myworkdayjobs},
     # https://thoughtspot.wd5.myworkdayjobs.com/careers
-    {"name": "ThoughtSpot", "formatted_name": "thoughtspot", "scraper": workday},
+    {"name": "ThoughtSpot", "formatted_name": "thoughtspot", "scraper": myworkdayjobs},
     {"name": "Postman", "formatted_name": "postman", "scraper": greenhouse},
     {"name": "Freshworks", "formatted_name": "freshworks", "scraper": smartrecruiters},
     # https://redhat.wd5.myworkdayjobs.com/Jobs
-    {"name": "Red Hat", "formatted_name": "redhat", "scraper": workday},
+    {"name": "Red Hat", "formatted_name": "redhat", "scraper": myworkdayjobs},
 ]
 
 tier_2c = [
@@ -124,27 +125,27 @@ tier_2c = [
     {"name": "Qualcomm", "formatted_name": "qualcomm", "scraper": qualcomm},
     {"name": "Asana", "formatted_name": "asana", "scraper": greenhouse},
     # https://wd3.myworkdaysite.com/recruiting/takeaway/grubhubcareers
-    {"name": "GrubHub", "formatted_name": "grubhub", "scraper": workday},
+    {"name": "GrubHub", "formatted_name": "grubhub", "scraper": myworkdaysite},
     {"name": "HubSpot", "formatted_name": "hubspot", "scraper": hubspot},
-    {"name": "Eventbrite", "formatted_name": "eventbrite", "scraper": greenhouse},
+    {"name": "Eventbrite", "formatted_name": "eventbriteinc", "scraper": greenhouse},
     # uscareers-yelp.icims.com/
     {"name": "Yelp", "formatted_name": "yelp", "scraper": icims},
     {"name": "IBM", "formatted_name": "ibm", "scraper": avature},
     # https://gartner.wd5.myworkdayjobs.com/en-US/ext
-    {"name": "Gartner", "formatted_name": "gartner", "scraper": workday},
+    {"name": "Gartner", "formatted_name": "gartner", "scraper": myworkdayjobs},
     # https://careers-riverbed.icims.com/
     {"name": "Riverbed", "formatted_name": "riverbed", "scraper": icims},
     {"name": "Deloitte", "formatted_name": "deloitte", "scraper": deloitte},
     # https://globalhr.wd5.myworkdayjobs.com/REC_RTX_Ext_Gateway
     {
         "name": "Raytheon Technologies",
-        "formatted_name": "raytheon technologies",
+        "formatted_name": "globalhr",
         "scraper": workday,
     },
     # https://gdit.wd5.myworkdayjobs.com/External_Career_Site
     {
         "name": "General Dynamics",
-        "formatted_name": "general dynamics",
+        "formatted_name": "gdit",
         "scraper": workday,
     },
     {"name": "L3Harris", "formatted_name": "l3harris", "scraper": nc2},
