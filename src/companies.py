@@ -21,12 +21,14 @@ from scrapers import (
     hubspot,
     deloitte,
     qualcomm,
+    linkedin,
+    peloton,
 )
 
 tier_1a = [
     {"name": "Meta", "formatted_name": "meta", "scraper": meta},
     {"name": "Google", "formatted_name": "google", "scraper": google},
-    {"name": "LinkedIn", "formatted_name": "linkedin", "scraper": greenhouse},
+    {"name": "LinkedIn", "formatted_name": "linkedin", "scraper": linkedin},
     {"name": "Uber", "formatted_name": "uber", "scraper": uber},
     # https://salesforce.wd12.myworkdayjobs.com/External_Career_Site
     {"name": "Salesforce", "formatted_name": "salesforce", "scraper": workday},
