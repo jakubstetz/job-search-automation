@@ -34,6 +34,7 @@ tier_1a = [
     # https://salesforce.wd12.myworkdayjobs.com/External_Career_Site
     {"name": "Salesforce", "formatted_name": "salesforce", "scraper": myworkdayjobs},
     {"name": "Stripe", "formatted_name": "stripe", "scraper": greenhouse},
+    # https://nvidia.wd5.myworkdayjobs.com/NVIDIAExternalCareerSite
     {"name": "NVIDIA", "formatted_name": "nvidia", "scraper": myworkdayjobs},
 ]
 
@@ -140,13 +141,13 @@ tier_2c = [
     {
         "name": "Raytheon Technologies",
         "formatted_name": "globalhr",
-        "scraper": workday,
+        "scraper": myworkdayjobs,
     },
     # https://gdit.wd5.myworkdayjobs.com/External_Career_Site
     {
         "name": "General Dynamics",
         "formatted_name": "gdit",
-        "scraper": workday,
+        "scraper": myworkdayjobs,
     },
     {"name": "L3Harris", "formatted_name": "l3harris", "scraper": nc2},
     {"name": "Mattermost", "formatted_name": "mattermost", "scraper": greenhouse},
