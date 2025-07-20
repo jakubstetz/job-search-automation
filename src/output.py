@@ -60,8 +60,8 @@ def create_summary_log(
     jobs_found: Dict[str, List[Dict]], total_jobs: int, companies_with_jobs: int
 ) -> None:
     """Create a summary log file with all jobs found in this run."""
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    summary_file = BY_SCRAPE_DIR / f"summary_{timestamp}.txt"
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H:%M")
+    summary_file = BY_SCRAPE_DIR / f"{timestamp}.txt"
 
     with open(summary_file, "w", encoding="utf-8") as f:
         f.write(

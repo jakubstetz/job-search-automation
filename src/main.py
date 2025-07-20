@@ -53,6 +53,7 @@ def scrape_tier(
             print_debug(f"No scraper configured for {company_name}")
             continue
 
+        print(f"\n{'- '*30}")
         try:
             # formatted_name not needed for custom scrapers
             if scraper in [lever, greenhouse, ashby]:
@@ -101,11 +102,11 @@ def main():
 
     # Define tiers to scrape
     tiers = [
-        # ("Tier 1A", tier_1a),
-        # ("Tier 1B", tier_1b),
+        ("Tier 1A", tier_1a),
+        ("Tier 1B", tier_1b),
         ("Tier 2A", tier_2a),
-        # ("Tier 2B", tier_2b),
-        # ("Tier 2C", tier_2c),
+        ("Tier 2B", tier_2b),
+        ("Tier 2C", tier_2c),
     ]
 
     # Scrape each tier and extend list of newly discovered jobs
