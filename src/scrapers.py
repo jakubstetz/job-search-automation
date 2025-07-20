@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 from typing import List, Dict, Optional, Set
 import time
 
-from config import REQUEST_DELAY_SECONDS, TIMEOUT_SECONDS
+from config import REQUEST_DELAY_SECONDS, TIMEOUT_SECONDS, MYWORKDAYJOBS_URL_DETAILS
 from utils import should_include_job
 from output import print_debug, print_error
 
@@ -194,38 +194,76 @@ def netflix(found_jobs: Set[str]) -> List[Dict]:
         A list of new job listings for that company
     """
     jobs = []
-    api_url = "https://explore.jobs.netflix.net/api/apply/v2/jobs?domain=netflix.com&start=0&num=50&query=Software%20Engineer&sort_by=relevance"
+    page_size = 50
+    start = 0
+    max_pages = 20  # Reasonable limit to prevent infinite loops
+    pages_fetched = 0
 
     print_debug("Scraping Netflix custom API")
 
-    response = make_request(api_url)
-    if not response or response.status_code != 200:
-        print_error(
-            "Netflix",
-            f"Failed to fetch Netflix jobs (status: {response.status_code if response else 'None'})",
-        )
-        return jobs
+    while pages_fetched < max_pages:
+        api_url = f"https://explore.jobs.netflix.net/api/apply/v2/jobs?domain=netflix.com&start={start}&num={page_size}&query=Software%20Engineer&sort_by=relevance"
 
-    try:
-        data = response.json()
-        job_listings = data.get("positions", [])
+        print_debug(f"Fetching Netflix page {pages_fetched + 1} (start={start})")
 
-        for job in job_listings:
-            title = job.get("name", "")
-            url = job.get("canonicalPositionUrl", "")
+        response = make_request(api_url)
+        if not response or response.status_code != 200:
+            print_error(
+                "Netflix",
+                f"Failed to fetch Netflix jobs (status: {response.status_code if response else 'None'})",
+            )
+            break
 
-            # Apply filtering and check for duplicates
-            if should_include_job(title) and url not in found_jobs:
-                jobs.append(
-                    {
-                        "title": title,
-                        "url": url,
-                    }
+        try:
+            data = response.json()
+            job_listings = data.get("positions", [])
+
+            # If no jobs returned, we've reached the end
+            if not job_listings:
+                print_debug(f"No more Netflix jobs found after {pages_fetched} pages")
+                break
+
+            page_jobs_found = 0
+            for job in job_listings:
+                title = job.get("name", "")
+                url = job.get("canonicalPositionUrl", "")
+
+                # Apply filtering and check for duplicates
+                if should_include_job(title) and url not in found_jobs:
+                    jobs.append(
+                        {
+                            "title": title,
+                            "url": url,
+                        }
+                    )
+                    page_jobs_found += 1
+
+            print_debug(
+                f"Found {page_jobs_found} new Netflix jobs on page {pages_fetched + 1}"
+            )
+
+            # If we got fewer jobs than requested, we've likely reached the end
+            if len(job_listings) < page_size:
+                print_debug(
+                    f"Netflix returned fewer jobs than requested, stopping pagination"
                 )
+                break
 
-    except Exception as e:
-        print_error("Netflix", f"Error parsing Netflix response: {e}")
+            start += page_size
+            pages_fetched += 1
 
+            # Additional sleep between pages to be respectful
+            if pages_fetched < max_pages:
+                print_debug("Sleeping briefly between Netflix pages...")
+                time.sleep(REQUEST_DELAY_SECONDS)
+
+        except Exception as e:
+            print_error("Netflix", f"Error parsing Netflix response: {e}")
+            break
+
+    print_debug(
+        f"Netflix pagination complete: {len(jobs)} total new jobs found across {pages_fetched} pages"
+    )
     return jobs
 
 
@@ -291,6 +329,10 @@ def uber(found_jobs: Set[str]) -> List[Dict]:
     api_url = "https://www.uber.com/api/loadSearchJobsResults"
     job_url_template = "https://www.uber.com/global/en/careers/list/{}/"
 
+    page_size = 50
+    current_page = 0
+    max_pages = 20  # Reasonable limit to prevent infinite loops
+
     print_debug("Scraping Uber custom API")
 
     headers = {
@@ -301,48 +343,80 @@ def uber(found_jobs: Set[str]) -> List[Dict]:
         "localeCode": "en",
     }
 
-    json_data = {
-        "params": {
-            "department": [
-                "Engineering",
-            ],
-            "query": "software engineer",
-        },
-        "page": 0,
-        "limit": 50,
-    }
+    while current_page < max_pages:
+        json_data = {
+            "params": {
+                "department": [
+                    "Engineering",
+                ],
+                "query": "software engineer",
+            },
+            "page": current_page,
+            "limit": page_size,
+        }
 
-    response = make_post_request(
-        api_url, params=params, headers=headers, json=json_data
-    )
-    if not response or response.status_code != 200:
-        print_error(
-            "Uber",
-            f"Failed to fetch Uber jobs (status: {response.status_code if response else 'None'})",
+        print_debug(f"Fetching Uber page {current_page + 1}")
+
+        response = make_post_request(
+            api_url, params=params, headers=headers, json=json_data
         )
-        return jobs
+        if not response or response.status_code != 200:
+            print_error(
+                "Uber",
+                f"Failed to fetch Uber jobs (status: {response.status_code if response else 'None'})",
+            )
+            break
 
-    try:
-        data = response.json()
-        job_listings = data.get("data", {}).get("results", [])
+        try:
+            data = response.json()
+            job_listings = data.get("data", {}).get("results", [])
 
-        for job in job_listings:
-            title = job.get("title", "")
-            job_id = job.get("id", "")
-            url = job_url_template.format(job_id) if job_id else ""
+            # If no jobs returned, we've reached the end
+            if not job_listings:
+                print_debug(f"No more Uber jobs found after {current_page} pages")
+                break
 
-            # Apply filtering and check for duplicates
-            if should_include_job(title) and url not in found_jobs:
-                jobs.append(
-                    {
-                        "title": title,
-                        "url": url,
-                    }
+            page_jobs_found = 0
+            for job in job_listings:
+                title = job.get("title", "")
+                job_id = job.get("id", "")
+                url = job_url_template.format(job_id) if job_id else ""
+
+                # Apply filtering and check for duplicates
+                if should_include_job(title) and url not in found_jobs:
+                    jobs.append(
+                        {
+                            "title": title,
+                            "url": url,
+                        }
+                    )
+                    page_jobs_found += 1
+
+            print_debug(
+                f"Found {page_jobs_found} new Uber jobs on page {current_page + 1}"
+            )
+
+            # If we got fewer jobs than requested, we've likely reached the end
+            if len(job_listings) < page_size:
+                print_debug(
+                    f"Uber returned fewer jobs than requested, stopping pagination"
                 )
+                break
 
-    except Exception as e:
-        print_error("Uber", f"Error parsing Uber response: {e}")
+            current_page += 1
 
+            # Additional sleep between pages to be respectful
+            if current_page < max_pages:
+                print_debug("Sleeping briefly between Uber pages...")
+                time.sleep(REQUEST_DELAY_SECONDS)
+
+        except Exception as e:
+            print_error("Uber", f"Error parsing Uber response: {e}")
+            break
+
+    print_debug(
+        f"Uber pagination complete: {len(jobs)} total new jobs found across {current_page} pages"
+    )
     return jobs
 
 
@@ -357,46 +431,88 @@ def servicenow(found_jobs: Set[str]) -> List[Dict]:
         A list of new job listings for that company
     """
     jobs = []
-    api_url = (
-        "https://careers.smartrecruiters.com/ServiceNow/?search=software%20engineer"
-    )
+    base_url = "https://careers.smartrecruiters.com/ServiceNow/"
+    search_query = "?search=software%20engineer"
+
+    current_page = 1
+    max_pages = 20  # Reasonable limit for HTML scraping
 
     print_debug("Scraping ServiceNow custom API")
 
-    response = make_request(api_url)
-    if not response or response.status_code != 200:
-        print_error(
-            "ServiceNow",
-            f"Failed to fetch ServiceNow jobs (status: {response.status_code if response else 'None'})",
-        )
-        return jobs
+    while current_page <= max_pages:
+        # SmartRecruiters uses page parameter for pagination
+        if current_page == 1:
+            api_url = base_url + search_query
+        else:
+            api_url = base_url + search_query + f"&page={current_page}"
 
-    try:
-        soup = BeautifulSoup(response.content, "html.parser")
-        job_postings = soup.find_all(
-            "li", attrs={"class": "opening-job job column wide-7of16 medium-1of2"}
-        )
+        print_debug(f"Fetching ServiceNow page {current_page}")
 
-        for posting in job_postings:
-            title_elem = posting.find("h4")
-            url_elem = posting.find("a")
+        response = make_request(api_url)
+        if not response or response.status_code != 200:
+            print_error(
+                "ServiceNow",
+                f"Failed to fetch ServiceNow jobs (status: {response.status_code if response else 'None'})",
+            )
+            break
 
-            if title_elem and url_elem:
-                title = title_elem.get_text(strip=True)
-                url = url_elem["href"]
+        try:
+            soup = BeautifulSoup(response.content, "html.parser")
+            job_postings = soup.find_all(
+                "li", attrs={"class": "opening-job job column wide-7of16 medium-1of2"}
+            )
 
-                # Apply filtering and check for duplicates
-                if should_include_job(title) and url not in found_jobs:
-                    jobs.append(
-                        {
-                            "title": title,
-                            "url": url,
-                        }
-                    )
+            # If no jobs found on this page, we've reached the end
+            if not job_postings:
+                print_debug(
+                    f"No more ServiceNow jobs found after {current_page - 1} pages"
+                )
+                break
 
-    except Exception as e:
-        print_error("ServiceNow", f"Error parsing ServiceNow response: {e}")
+            page_jobs_found = 0
+            for posting in job_postings:
+                title_elem = posting.find("h4")
+                url_elem = posting.find("a")
 
+                if title_elem and url_elem:
+                    title = title_elem.get_text(strip=True)
+                    url = url_elem["href"]
+
+                    # Apply filtering and check for duplicates
+                    if should_include_job(title) and url not in found_jobs:
+                        jobs.append(
+                            {
+                                "title": title,
+                                "url": url,
+                            }
+                        )
+                        page_jobs_found += 1
+
+            print_debug(
+                f"Found {page_jobs_found} new ServiceNow jobs on page {current_page}"
+            )
+
+            # If no new jobs found on this page, we've likely reached the end
+            if page_jobs_found == 0:
+                print_debug(
+                    f"No new ServiceNow jobs found on page {current_page}, stopping pagination"
+                )
+                break
+
+            current_page += 1
+
+            # Additional sleep between pages to be respectful
+            if current_page <= max_pages:
+                print_debug("Sleeping briefly between ServiceNow pages...")
+                time.sleep(REQUEST_DELAY_SECONDS)
+
+        except Exception as e:
+            print_error("ServiceNow", f"Error parsing ServiceNow response: {e}")
+            break
+
+    print_debug(
+        f"ServiceNow pagination complete: {len(jobs)} total new jobs found across {current_page - 1} pages"
+    )
     return jobs
 
 
@@ -416,8 +532,121 @@ def myworkdayjobs(company: str, found_jobs: Set[str]) -> List[Dict]:
     Returns:
         A list of new job listings for that company
     """
-    print("🚧 MYWORKDAYJOBS SCRAPER NOT YET IMPLEMENTED 🚧")
-    return []
+    jobs = []
+
+    # Get company-specific URL details from config
+    if company not in MYWORKDAYJOBS_URL_DETAILS:
+        print_error(company, f"No Workday URL configuration found for {company}")
+        return jobs
+
+    config = MYWORKDAYJOBS_URL_DETAILS[company]
+    datacenter_id = config["datacenter_id"]
+    final_path_segment = config["final_path_segment"]
+
+    # Construct the API endpoint URL (discovered pattern)
+    api_url = f"https://{company}.wd{datacenter_id}.myworkdayjobs.com/wday/cxs/{company}/{final_path_segment}/jobs"
+    base_url = (
+        f"https://{company}.wd{datacenter_id}.myworkdayjobs.com/{final_path_segment}"
+    )
+
+    print_debug(f"Scraping Workday API for {company} at {api_url}")
+
+    page_size = 20
+    current_offset = 0
+    max_pages = 20  # Workday sites can have many jobs, so higher limit
+    pages_fetched = 0
+
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
+    }
+
+    while pages_fetched < max_pages:
+        # Workday API parameters
+        search_params = {
+            "appliedFacets": {},
+            "limit": page_size,
+            "offset": current_offset,
+            "searchText": "",
+        }
+
+        print_debug(
+            f"Fetching {company} Workday page {pages_fetched + 1} (offset={current_offset})"
+        )
+
+        response = make_post_request(api_url, json=search_params, headers=headers)
+        if not response or response.status_code != 200:
+            print_error(
+                company,
+                f"Failed to fetch Workday jobs (status: {response.status_code if response else 'None'})",
+            )
+            break
+
+        try:
+            data = response.json()
+            job_listings = data.get("jobPostings", [])
+
+            # If no jobs returned, we've reached the end
+            if not job_listings:
+                print_debug(
+                    f"No more {company} Workday jobs found after {pages_fetched} pages"
+                )
+                break
+
+            page_jobs_found = 0
+            for job in job_listings:
+                title = job.get("title", "")
+                external_path = job.get("externalPath", "")
+
+                if not external_path:
+                    continue
+
+                # Construct the full job URL
+                job_url = f"{base_url}{external_path}"
+
+                # Extract location if available
+                location = job.get("locationsText", "")
+
+                # Apply filtering and check for duplicates
+                if should_include_job(title) and job_url not in found_jobs:
+                    job_data = {
+                        "title": title,
+                        "url": job_url,
+                    }
+                    if location:
+                        job_data["location"] = location
+
+                    jobs.append(job_data)
+                    page_jobs_found += 1
+
+            print_debug(
+                f"Found {page_jobs_found} new {company} Workday jobs on page {pages_fetched + 1}"
+            )
+
+            # If we got fewer jobs than requested, we've likely reached the end
+            if len(job_listings) < page_size:
+                print_debug(
+                    f"{company} Workday returned fewer jobs than requested, stopping pagination"
+                )
+                break
+
+            current_offset += page_size
+            pages_fetched += 1
+
+            # Additional sleep between pages to be respectful
+            if pages_fetched < max_pages:
+                print_debug(f"Sleeping briefly between {company} Workday pages...")
+                time.sleep(REQUEST_DELAY_SECONDS)
+
+        except Exception as e:
+            print_error(company, f"Error parsing Workday JSON response: {e}")
+            break
+
+    print_debug(
+        f"{company} Workday pagination complete: {len(jobs)} total new jobs found across {pages_fetched} pages"
+    )
+    return jobs
 
 
 def myworkdaysite(company: str, found_jobs: Set[str]) -> List[Dict]:
