@@ -650,4 +650,18 @@ def peloton(found_jobs: Set[str]) -> List[Dict]:
     return []
 
 
+def linkedin(found_jobs: Set[str]) -> List[Dict]:
+    """
+    Custom scraper for LinkedIn.
+
+    Args:
+        found_jobs: Set containing URLs of previously found listings
+
+    Returns:
+        A list of new job listings for that company
+    """
+    print("🚧 APPLE SCRAPER NOT YET IMPLEMENTED 🚧")
+    return []
+
+
 # --------------------------------------------
