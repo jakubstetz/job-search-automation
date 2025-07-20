@@ -94,7 +94,30 @@ EXCLUDE_KEYWORDS = [
     "Perception",
     "Vision",
     "Administrator",
+    "Forward Deployed",
 ]
+
+# Required URL details for companies using Workday ATS (specifically myworkdayjobs)
+# These datacenter IDs and final path segments were found by manually checking each company's job board
+MYWORKDAYJOBS_URL_DETAILS = {
+    "salesforce": {"datacenter_id": "12", "final_path_segment": "External_Career_Site"},
+    "crowdstrike": {"datacenter_id": "5", "final_path_segment": "crowdstrikecareers"},
+    "capitalone": {"datacenter_id": "12", "final_path_segment": "Capital_One"},
+    "zillow": {"datacenter_id": "5", "final_path_segment": "Zillow_Group_External"},
+    "etsy": {"datacenter_id": "5", "final_path_segment": "Etsy_Careers"},
+    "cohesity": {"datacenter_id": "5", "final_path_segment": "Cohesity_Careers/"},
+    "thoughtspot": {"datacenter_id": "5", "final_path_segment": "careers"},
+    "redhat": {"datacenter_id": "5", "final_path_segment": "Jobs"},
+    "gartner": {"datacenter_id": "5", "final_path_segment": "en-US/ext"},
+    "globalhr": {  # Raytheon Technologies
+        "datacenter_id": "5",
+        "final_path_segment": "REC_RTX_Ext_Gateway",
+    },
+    "gdit": {  # General Dynamics
+        "datacenter_id": "5",
+        "final_path_segment": "External_Career_Site",
+    },
+}
 
 # Output configuration
 OUTPUT_TO_CONSOLE = True
