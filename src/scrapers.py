@@ -405,9 +405,9 @@ def servicenow(found_jobs: Set[str]) -> List[Dict]:
 # --------------------------------------------
 
 
-def workday(company: str, found_jobs: Set[str]) -> List[Dict]:
+def myworkdayjobs(company: str, found_jobs: Set[str]) -> List[Dict]:
     """
-    Scraper for Workday platform.
+    Scraper for Workday platform, specifically the myworkdayjobs.com domain.
 
     Args:
         company: Name of company, already formatted for immediate use
@@ -416,7 +416,22 @@ def workday(company: str, found_jobs: Set[str]) -> List[Dict]:
     Returns:
         A list of new job listings for that company
     """
-    print("🚧 WORKDAY SCRAPER NOT YET IMPLEMENTED 🚧")
+    print("🚧 MYWORKDAYJOBS SCRAPER NOT YET IMPLEMENTED 🚧")
+    return []
+
+
+def myworkdaysite(company: str, found_jobs: Set[str]) -> List[Dict]:
+    """
+    Scraper for Workday platform, specifically the myworkdaysite.com domain.
+
+    Args:
+        company: Name of company, already formatted for immediate use
+        found_jobs: Set containing URLs of previously found listings
+
+    Returns:
+        A list of new job listings for that company
+    """
+    print("🚧 MYWORKDAYSITE SCRAPER NOT YET IMPLEMENTED 🚧")
     return []
 
 
