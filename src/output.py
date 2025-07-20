@@ -6,16 +6,21 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List
 
-# Ensure search_results directory exists
-SEARCH_RESULTS_DIR = Path(__file__).parent / "search_results" / "by_company"
-SEARCH_RESULTS_DIR.mkdir(exist_ok=True)
+# Ensure search_results directories exist
+SEARCH_RESULTS_DIR = Path(__file__).parent / "search_results"
+BY_COMPANY_DIR = SEARCH_RESULTS_DIR / "by_company"
+BY_SCRAPE_DIR = SEARCH_RESULTS_DIR / "by_scrape"
+
+# Create both directories
+BY_COMPANY_DIR.mkdir(parents=True, exist_ok=True)
+BY_SCRAPE_DIR.mkdir(parents=True, exist_ok=True)
 
 
 def log_to_files(company: str, job_line: str, url: str) -> None:
     """Append job listing to company-specific log file."""
     # Create safe filename from company name
     safe_company_name = company.lower().replace(" ", "_").replace("-", "_")
-    log_file = SEARCH_RESULTS_DIR / f"{safe_company_name}.txt"
+    log_file = BY_COMPANY_DIR / f"{safe_company_name}.txt"
 
     # Get current timestamp
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -56,7 +61,7 @@ def create_summary_log(
 ) -> None:
     """Create a summary log file with all jobs found in this run."""
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    summary_file = SEARCH_RESULTS_DIR / f"summary_{timestamp}.txt"
+    summary_file = BY_SCRAPE_DIR / f"summary_{timestamp}.txt"
 
     with open(summary_file, "w", encoding="utf-8") as f:
         f.write(
@@ -87,8 +92,8 @@ def print_error(company: str, error_message: str) -> None:
     error_msg = f"ERROR scraping {company}: {error_message}"
     print(error_msg)
 
-    # Log error to error log file
-    error_log_file = SEARCH_RESULTS_DIR / "errors.txt"
+    # Log error to error log file in by_scrape directory
+    error_log_file = BY_SCRAPE_DIR / "errors.txt"
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     with open(error_log_file, "a", encoding="utf-8") as f:
