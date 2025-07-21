@@ -55,15 +55,16 @@ def save_new_jobs(new_job_urls: List[str]) -> None:
         print(f"Error saving new jobs to jobs_found.txt: {e}")
 
 
-def should_include_job(job_title: str) -> bool:
+def should_include_job(job_title: str, location: str = "") -> bool:
     """
-    Determine if a job should be included based on keyword filters.
+    Determine if a job should be included based on keyword and location filters.
 
     Args:
         job_title: Job title extracted from listing
+        location: Job location (optional)
 
     Returns:
-        True if job satisfies keyword include and exclude requirements, False otherwise
+        True if job satisfies keyword include/exclude and location requirements, False otherwise
     """
     job_title_lower = job_title.lower()
 
@@ -75,4 +76,379 @@ def should_include_job(job_title: str) -> bool:
     if any(keyword.lower() in job_title_lower for keyword in EXCLUDE_KEYWORDS):
         return False
 
+    # Location filtering: include if no location specified OR location is US/EU
+    if location and not is_us_or_eu_location(location):
+        return False
+
     return True
+
+
+def is_us_or_eu_location(location) -> bool:
+    """
+    Check if a location is in the United States or European Union.
+
+    Args:
+        location: Location string or dict to check
+
+    Returns:
+        True if location is in US or EU, False otherwise
+    """
+    if not location:
+        return False
+
+    # Handle non-string location data (e.g., dict from APIs)
+    if not isinstance(location, str):
+        return False
+
+    location_lower = location.lower()
+
+    import re
+
+    # US country and general indicators (simple substring match)
+    us_general_indicators = [
+        "united states",
+        "usa",
+        "america",
+        "american",
+    ]
+
+    # US states full names (simple substring match)
+    us_state_names = [
+        "california",
+        "new york",
+        "texas",
+        "florida",
+        "washington",
+        "illinois",
+        "pennsylvania",
+        "ohio",
+        "georgia",
+        "north carolina",
+        "michigan",
+        "new jersey",
+        "virginia",
+        "tennessee",
+        "arizona",
+        "massachusetts",
+        "indiana",
+        "maryland",
+        "missouri",
+        "wisconsin",
+        "colorado",
+        "minnesota",
+        "south carolina",
+        "alabama",
+        "louisiana",
+        "kentucky",
+        "oregon",
+        "oklahoma",
+        "connecticut",
+        "utah",
+        "iowa",
+        "nevada",
+        "arkansas",
+        "mississippi",
+        "kansas",
+        "new mexico",
+        "nebraska",
+        "west virginia",
+        "idaho",
+        "hawaii",
+        "new hampshire",
+        "maine",
+        "rhode island",
+        "montana",
+        "delaware",
+        "south dakota",
+        "north dakota",
+        "alaska",
+        "vermont",
+        "wyoming",
+    ]
+
+    # US state abbreviations (word boundary match only)
+    us_state_abbrevs = [
+        "ca",
+        "ny",
+        "tx",
+        "fl",
+        "wa",
+        "il",
+        "pa",
+        "oh",
+        "ga",
+        "nc",
+        "mi",
+        "nj",
+        "va",
+        "tn",
+        "az",
+        "ma",
+        "in",
+        "md",
+        "mo",
+        "wi",
+        "co",
+        "mn",
+        "sc",
+        "al",
+        "la",
+        "ky",
+        "or",
+        "ok",
+        "ct",
+        "ut",
+        "ia",
+        "nv",
+        "ar",
+        "ms",
+        "ks",
+        "nm",
+        "ne",
+        "wv",
+        "id",
+        "hi",
+        "nh",
+        "me",
+        "ri",
+        "mt",
+        "de",
+        "sd",
+        "nd",
+        "ak",
+        "vt",
+        "wy",
+    ]
+
+    # Major US cities (simple substring match)
+    us_cities = [
+        "san francisco",
+        "los angeles",
+        "chicago",
+        "houston",
+        "phoenix",
+        "philadelphia",
+        "san antonio",
+        "san diego",
+        "dallas",
+        "san jose",
+        "austin",
+        "jacksonville",
+        "fort worth",
+        "columbus",
+        "charlotte",
+        "detroit",
+        "el paso",
+        "memphis",
+        "denver",
+        "washington dc",
+        "boston",
+        "nashville",
+        "baltimore",
+        "portland",
+        "milwaukee",
+        "las vegas",
+        "atlanta",
+        "miami",
+        "seattle",
+        "new york city",
+        "nyc",
+    ]
+
+    # EU countries and indicators
+    eu_indicators = [
+        "european union",
+        "eu",
+        "europe",
+        "european",
+        # EU countries
+        "germany",
+        "german",
+        "france",
+        "french",
+        "italy",
+        "italian",
+        "spain",
+        "spanish",
+        "poland",
+        "polish",
+        "romania",
+        "romanian",
+        "netherlands",
+        "dutch",
+        "belgium",
+        "belgian",
+        "greece",
+        "greek",
+        "czech republic",
+        "czech",
+        "portugal",
+        "portuguese",
+        "sweden",
+        "swedish",
+        "hungary",
+        "hungarian",
+        "austria",
+        "austrian",
+        "belarus",
+        "switzerland",
+        "swiss",
+        "bulgaria",
+        "bulgarian",
+        "serbia",
+        "serbian",
+        "denmark",
+        "danish",
+        "finland",
+        "finnish",
+        "slovakia",
+        "slovak",
+        "norway",
+        "norwegian",
+        "ireland",
+        "irish",
+        "croatia",
+        "croatian",
+        "bosnia",
+        "albania",
+        "lithuanian",
+        "slovenia",
+        "latvian",
+        "estonia",
+        "estonian",
+        "moldova",
+        "macedonia",
+        "malta",
+        "luxembourg",
+        "cyprus",
+        "iceland",
+        "monaco",
+        "montenegro",
+        "liechtenstein",
+        # Major EU cities
+        "berlin",
+        "madrid",
+        "rome",
+        "paris",
+        "bucharest",
+        "hamburg",
+        "munich",
+        "milan",
+        "naples",
+        "turin",
+        "palermo",
+        "genoa",
+        "bologna",
+        "florence",
+        "barcelona",
+        "valencia",
+        "seville",
+        "zaragoza",
+        "málaga",
+        "murcia",
+        "palma",
+        "bilbao",
+        "alicante",
+        "córdoba",
+        "warsaw",
+        "kraków",
+        "łódź",
+        "wrocław",
+        "poznań",
+        "gdańsk",
+        "szczecin",
+        "bydgoszcz",
+        "lublin",
+        "amsterdam",
+        "rotterdam",
+        "hague",
+        "utrecht",
+        "eindhoven",
+        "tilburg",
+        "groningen",
+        "almere",
+        "brussels",
+        "antwerp",
+        "ghent",
+        "charleroi",
+        "liège",
+        "bruges",
+        "athens",
+        "thessaloniki",
+        "prague",
+        "brno",
+        "ostrava",
+        "lisbon",
+        "porto",
+        "stockholm",
+        "gothenburg",
+        "malmö",
+        "budapest",
+        "debrecen",
+        "szeged",
+        "vienna",
+        "graz",
+        "linz",
+        "salzburg",
+        "innsbruck",
+        "zurich",
+        "geneva",
+        "basel",
+        "bern",
+        "lausanne",
+        "sofia",
+        "plovdiv",
+        "varna",
+        "belgrade",
+        "novi sad",
+        "copenhagen",
+        "aarhus",
+        "odense",
+        "aalborg",
+        "helsinki",
+        "espoo",
+        "tampere",
+        "vantaa",
+        "turku",
+        "bratislava",
+        "košice",
+        "oslo",
+        "bergen",
+        "stavanger",
+        "trondheim",
+        "dublin",
+        "cork",
+        "limerick",
+        "galway",
+        "zagreb",
+        "split",
+        "rijeka",
+        "reykjavik",
+    ]
+
+    # Check for US indicators using different matching strategies
+
+    # 1. Check general US indicators (simple substring match)
+    if any(indicator in location_lower for indicator in us_general_indicators):
+        return True
+
+    # 2. Check US state full names (simple substring match)
+    if any(state in location_lower for state in us_state_names):
+        return True
+
+    # 3. Check US cities (simple substring match)
+    if any(city in location_lower for city in us_cities):
+        return True
+
+    # 4. Check US state abbreviations (word boundary match only to avoid false positives)
+    for abbrev in us_state_abbrevs:
+        # Use word boundaries to ensure abbreviation appears as complete word
+        pattern = r"\b" + re.escape(abbrev) + r"\b"
+        if re.search(pattern, location_lower):
+            return True
+
+    # Check for EU indicators
+    if any(indicator in location_lower for indicator in eu_indicators):
+        return True
+
+    return False

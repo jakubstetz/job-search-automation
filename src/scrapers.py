@@ -69,19 +69,25 @@ def lever(company: str, found_jobs: Set[str]) -> List[Dict]:
         for posting in job_postings:
             title_elem = posting.find("h5")
             url_elem = posting.find("a")
+            location_elem = posting.find(
+                "span", class_="sort-by-location posting-category small-category-label"
+            )
 
             if title_elem and url_elem:
                 title = title_elem.get_text(strip=True)
                 url = url_elem["href"]
+                location = location_elem.get_text(strip=True) if location_elem else ""
 
                 # Apply filtering and check for duplicates
-                if should_include_job(title) and url not in found_jobs:
-                    jobs.append(
-                        {
-                            "title": title,
-                            "url": url,
-                        }
-                    )
+                if should_include_job(title, location) and url not in found_jobs:
+                    job_data = {
+                        "title": title,
+                        "url": url,
+                    }
+                    if location:
+                        job_data["location"] = location
+
+                    jobs.append(job_data)
 
     except Exception as e:
         print_error(company, f"Error parsing Lever response: {e}")
@@ -120,15 +126,20 @@ def greenhouse(company: str, found_jobs: Set[str]) -> List[Dict]:
         for job in job_listings:
             title = job.get("title", "")
             url = job.get("absolute_url", "")
+            location = (
+                job.get("location", {}).get("name", "") if job.get("location") else ""
+            )
 
             # Apply filtering and check for duplicates
-            if should_include_job(title) and url not in found_jobs:
-                jobs.append(
-                    {
-                        "title": title,
-                        "url": url,
-                    }
-                )
+            if should_include_job(title, location) and url not in found_jobs:
+                job_data = {
+                    "title": title,
+                    "url": url,
+                }
+                if location:
+                    job_data["location"] = location
+
+                jobs.append(job_data)
 
     except Exception as e:
         print_error(company, f"Error parsing Greenhouse response: {e}")
@@ -167,15 +178,19 @@ def ashby(company: str, found_jobs: Set[str]) -> List[Dict]:
         for job in job_listings:
             title = job.get("title", "")
             url = job.get("jobUrl", "")
+            # Ashby typically stores location in locationName or address field
+            location = job.get("locationName", "") or job.get("address", "")
 
             # Apply filtering and check for duplicates
-            if should_include_job(title) and url not in found_jobs:
-                jobs.append(
-                    {
-                        "title": title,
-                        "url": url,
-                    }
-                )
+            if should_include_job(title, location) and url not in found_jobs:
+                job_data = {
+                    "title": title,
+                    "url": url,
+                }
+                if location:
+                    job_data["location"] = location
+
+                jobs.append(job_data)
 
     except Exception as e:
         print_error(company, f"Error parsing Ashby response: {e}")
@@ -227,15 +242,18 @@ def netflix(found_jobs: Set[str]) -> List[Dict]:
             for job in job_listings:
                 title = job.get("name", "")
                 url = job.get("canonicalPositionUrl", "")
+                location = job.get("locations", [""])[0] if job.get("locations") else ""
 
                 # Apply filtering and check for duplicates
-                if should_include_job(title) and url not in found_jobs:
-                    jobs.append(
-                        {
-                            "title": title,
-                            "url": url,
-                        }
-                    )
+                if should_include_job(title, location) and url not in found_jobs:
+                    job_data = {
+                        "title": title,
+                        "url": url,
+                    }
+                    if location:
+                        job_data["location"] = location
+
+                    jobs.append(job_data)
                     page_jobs_found += 1
 
             print_debug(
@@ -299,15 +317,18 @@ def spotify(found_jobs: Set[str]) -> List[Dict]:
             title = job.get("text", "")
             job_id = job.get("id", "")
             url = listing_url_template.format(job_id) if job_id else ""
+            location = job.get("city", "")
 
             # Apply filtering and check for duplicates
-            if should_include_job(title) and url not in found_jobs:
-                jobs.append(
-                    {
-                        "title": title,
-                        "url": url,
-                    }
-                )
+            if should_include_job(title, location) and url not in found_jobs:
+                job_data = {
+                    "title": title,
+                    "url": url,
+                }
+                if location:
+                    job_data["location"] = location
+
+                jobs.append(job_data)
 
     except Exception as e:
         print_error("Spotify", f"Error parsing Spotify response: {e}")
@@ -382,14 +403,29 @@ def uber(found_jobs: Set[str]) -> List[Dict]:
                 job_id = job.get("id", "")
                 url = job_url_template.format(job_id) if job_id else ""
 
-                # Apply filtering and check for duplicates
-                if should_include_job(title) and url not in found_jobs:
-                    jobs.append(
-                        {
-                            "title": title,
-                            "url": url,
-                        }
+                # Extract location from potentially complex location data
+                location_data = job.get("location", "")
+                if isinstance(location_data, dict):
+                    # Handle dictionary location data - try common fields
+                    location = (
+                        location_data.get("name", "")
+                        or location_data.get("city", "")
+                        or location_data.get("location", "")
+                        or ""
                     )
+                else:
+                    location = location_data or ""
+
+                # Apply filtering and check for duplicates
+                if should_include_job(title, location) and url not in found_jobs:
+                    job_data = {
+                        "title": title,
+                        "url": url,
+                    }
+                    if location:
+                        job_data["location"] = location
+
+                    jobs.append(job_data)
                     page_jobs_found += 1
 
             print_debug(
@@ -473,19 +509,25 @@ def servicenow(found_jobs: Set[str]) -> List[Dict]:
             for posting in job_postings:
                 title_elem = posting.find("h4")
                 url_elem = posting.find("a")
+                location_elem = posting.find("span", class_="job-location")
 
                 if title_elem and url_elem:
                     title = title_elem.get_text(strip=True)
                     url = url_elem["href"]
+                    location = (
+                        location_elem.get_text(strip=True) if location_elem else ""
+                    )
 
                     # Apply filtering and check for duplicates
-                    if should_include_job(title) and url not in found_jobs:
-                        jobs.append(
-                            {
-                                "title": title,
-                                "url": url,
-                            }
-                        )
+                    if should_include_job(title, location) and url not in found_jobs:
+                        job_data = {
+                            "title": title,
+                            "url": url,
+                        }
+                        if location:
+                            job_data["location"] = location
+
+                        jobs.append(job_data)
                         page_jobs_found += 1
 
             print_debug(
@@ -609,7 +651,7 @@ def myworkdayjobs(company: str, found_jobs: Set[str]) -> List[Dict]:
                 location = job.get("locationsText", "")
 
                 # Apply filtering and check for duplicates
-                if should_include_job(title) and job_url not in found_jobs:
+                if should_include_job(title, location) and job_url not in found_jobs:
                     job_data = {
                         "title": title,
                         "url": job_url,
