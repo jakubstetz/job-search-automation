@@ -13,7 +13,7 @@ INCLUDE_KEYWORDS = [
     "Software",
     # The remaining terms are unneeded but may help catch any oddball job titles
     "Backend",
-    "Full",  # Covers various spellings of full-stack
+    "Stack",  # Covers various spellings of full-stack
     "Python",
     "Go",
     "JavaScript",
