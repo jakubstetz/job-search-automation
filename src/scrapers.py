@@ -178,8 +178,33 @@ def ashby(company: str, found_jobs: Set[str]) -> List[Dict]:
         for job in job_listings:
             title = job.get("title", "")
             url = job.get("jobUrl", "")
-            # Ashby typically stores location in locationName or address field
-            location = job.get("locationName", "") or job.get("address", "")
+
+            # Handle Ashby's complex location format
+            location = ""
+            location_data = job.get("locationName", "") or job.get("address", "")
+
+            if isinstance(location_data, dict):
+                # Handle nested location structure like {'postalAddress': {'addressCountry': 'United States', ...}}
+                if "postalAddress" in location_data:
+                    postal = location_data["postalAddress"]
+                    parts = []
+                    if postal.get("addressLocality"):
+                        parts.append(postal["addressLocality"])
+                    if postal.get("addressRegion"):
+                        parts.append(postal["addressRegion"])
+                    if postal.get("addressCountry"):
+                        parts.append(postal["addressCountry"])
+                    location = ", ".join(parts)
+                else:
+                    # Try other common fields in location dict
+                    location = (
+                        location_data.get("name")
+                        or location_data.get("city")
+                        or location_data.get("location")
+                        or str(location_data)
+                    )
+            else:
+                location = location_data or ""
 
             # Apply filtering and check for duplicates
             if should_include_job(title, location) and url not in found_jobs:
