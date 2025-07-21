@@ -1,7 +1,7 @@
 # Job search configuration
 
 # Rate limiting configuration
-REQUEST_DELAY_SECONDS = 1  # Delay between requests to be respectful
+REQUEST_DELAY_SECONDS = 3  # Delay between requests to be respectful
 TIMEOUT_SECONDS = 10  # Request timeout
 
 # Keywords to include in job searches
