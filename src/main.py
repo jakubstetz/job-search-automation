@@ -63,7 +63,7 @@ def scrape_tier(
             tier_results[company_name] = jobs
 
             # Print results and log to files
-            print(f"Found {len(jobs)} new matching jobs for {company_name}")
+            print(f"Found {len(jobs)} new matching jobs for {company_name}\n")
             for job in jobs:
                 # Include location if available
                 if job.get("location"):
