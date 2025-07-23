@@ -52,6 +52,7 @@ EXCLUDE_KEYWORDS = [
     "Chief",
     "Sr",
     # Filter out roles in areas that are definitely out of scope
+    "Ambassador",
     "Solutions Architect",
     "Analyst",
     "Technical Support",
