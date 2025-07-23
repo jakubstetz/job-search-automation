@@ -1,8 +1,8 @@
 from scrapers import (
-    greenhouse,
+    greenhouse,  # The vast majority of companies use this
     lever,
     ashby,
-    myworkdayjobs,
+    myworkdayjobs,  # Another common one
     myworkdaysite,
     icims,
     successfactors,
@@ -26,6 +26,8 @@ from scrapers import (
     peloton,
     atlassian,
     github,
+    ebay,
+    tiktok,
 )
 
 tier_1a = [
@@ -104,6 +106,12 @@ tier_1b = [
         "name": "Amazon",
         "formatted_name": "amazon",
         "scraper": amazon,
+        "manually_verified": False,
+    },
+    {
+        "name": "xAI",
+        "formatted_name": "xai",
+        "scraper": greenhouse,
         "manually_verified": False,
     },
 ]
@@ -275,6 +283,48 @@ tier_2a = [
         "scraper": greenhouse,
         "manually_verified": False,
     },
+    {
+        "name": "Airtable",
+        "formatted_name": "airtable",
+        "scraper": greenhouse,
+        "manually_verified": False,
+    },
+    {
+        "name": "Coinbase",
+        "formatted_name": "coinbase",
+        "scraper": greenhouse,
+        "manually_verified": False,
+    },
+    {
+        "name": "Grammarly",
+        "formatted_name": "grammarly",
+        "scraper": greenhouse,
+        "manually_verified": False,
+    },
+    {
+        "name": "ReTool",
+        "formatted_name": "retool",
+        "scraper": greenhouse,
+        "manually_verified": False,
+    },
+    {
+        "name": "Scale AI",
+        "formatted_name": "scaleai",
+        "scraper": greenhouse,
+        "manually_verified": False,
+    },
+    {
+        "name": "TikTok",
+        "formatted_name": "tiktok",
+        "scraper": tiktok,
+        "manually_verified": False,
+    },
+    {
+        "name": "Twitch",
+        "formatted_name": "Twitch",
+        "scraper": greenhouse,
+        "manually_verified": False,
+    },
 ]
 
 tier_2b = [
@@ -407,6 +457,72 @@ tier_2b = [
     {
         "name": "RunPod",
         "formatted_name": "runpod",
+        "scraper": greenhouse,
+        "manually_verified": False,
+    },
+    {
+        "name": "Benchling",
+        "formatted_name": "benchling",
+        "scraper": greenhouse,
+        "manually_verified": False,
+    },
+    {
+        "name": "Box",
+        "formatted_name": "boxinc",
+        "scraper": greenhouse,
+        "manually_verified": False,
+    },
+    {
+        "name": "Aurora Innovation",
+        "formatted_name": "aurorainnovation",
+        "scraper": greenhouse,
+        "manually_verified": False,
+    },
+    {
+        "name": "Chime",
+        "formatted_name": "chime",
+        "scraper": greenhouse,
+        "manually_verified": False,
+    },
+    {
+        "name": "Checkr",
+        "formatted_name": "checkr",
+        "scraper": greenhouse,
+        "manually_verified": False,
+    },
+    {
+        "name": "Flexport",
+        "formatted_name": "flexport",
+        "scraper": greenhouse,
+        "manually_verified": False,
+    },
+    {
+        "name": "Nuro",
+        "formatted_name": "nuro",
+        "scraper": greenhouse,
+        "manually_verified": False,
+    },
+    {
+        "name": "Praetorian",
+        "formatted_name": "praetorian",
+        "scraper": greenhouse,
+        "manually_verified": False,
+    },
+    {
+        "name": "Qualtrics",
+        "formatted_name": "qualtrics",
+        "scraper": greenhouse,
+        "manually_verified": False,
+    },
+    {
+        "name": "X",
+        "formatted_name": "twitter",
+        "scraper": myworkdayjobs,
+        "manually_verified": False,
+    },
+    {
+        "name": "Greenhouse",
+        "formatted_name": "greenhouse",
         "scraper": greenhouse,
         "manually_verified": False,
     },
@@ -547,6 +663,42 @@ tier_2c = [
     {
         "name": "Zest AI",
         "formatted_name": "zestai",
+        "scraper": greenhouse,
+        "manually_verified": False,
+    },
+    {
+        "name": "Chewy",
+        "formatted_name": "chewy",
+        "scraper": greenhouse,
+        "manually_verified": False,
+    },
+    {
+        "name": "Appian",
+        "formatted_name": "appian",
+        "scraper": greenhouse,
+        "manually_verified": False,
+    },
+    {
+        "name": "eBay",
+        "formatted_name": "ebay",
+        "scraper": ebay,
+        "manually_verified": False,
+    },
+    {
+        "name": "Opendoor",
+        "formatted_name": "opendoor",
+        "scraper": greenhouse,
+        "manually_verified": False,
+    },
+    {
+        "name": "Workday",
+        "formatted_name": "workday",
+        "scraper": myworkdayjobs,
+        "manually_verified": False,
+    },
+    {
+        "name": "Verkada",
+        "formatted_name": "verkada",
         "scraper": greenhouse,
         "manually_verified": False,
     },
