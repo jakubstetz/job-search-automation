@@ -63,6 +63,7 @@ def scrape_tier(
                 myworkdayjobs,
                 myworkdaysite,
                 smartrecruiters,
+                jobvite,
             ]:
                 jobs = scraper(formatted_name, found_jobs)
             else:

@@ -685,8 +685,72 @@ def jobvite(company: str, found_jobs: Set[str]) -> List[Dict]:
     Returns:
         A list of new job listings for that company
     """
-    print("🚧 JOBVITE SCRAPER NOT YET IMPLEMENTED 🚧")
-    return []
+    jobs = []
+
+    # Jobvite uses jobs.jobvite.com/company-careers/jobs pattern
+    api_url = f"https://jobs.jobvite.com/{company}-careers/jobs"
+
+    print_debug(f"Scraping Jobvite for {company}")
+
+    response = make_request(api_url)
+    if not response or response.status_code != 200:
+        print_error(
+            company,
+            f"Failed to fetch Jobvite jobs (status: {response.status_code if response else 'None'})",
+        )
+        return jobs
+
+    try:
+        soup = BeautifulSoup(response.content, "html.parser")
+
+        # Look for job links in the table structure
+        job_links = soup.find_all("a", href=lambda x: x and "/job/" in x)
+
+        for link in job_links:
+            title = link.get_text(strip=True)
+            url = link.get("href", "")
+
+            # Make URL absolute if relative
+            if url and not url.startswith("http"):
+                url = (
+                    f"https://jobs.jobvite.com{url}"
+                    if url.startswith("/")
+                    else f"https://jobs.jobvite.com/{url}"
+                )
+
+            # Try to extract location from the table row
+            location = ""
+            # Look for location in the same table row
+            tr_parent = link
+            while tr_parent and tr_parent.name != "tr":
+                tr_parent = tr_parent.parent
+
+            if tr_parent:
+                # Location is typically in the second column
+                tds = tr_parent.find_all("td")
+                if len(tds) > 1:
+                    location = tds[1].get_text(strip=True)
+
+            # Apply filtering and check for duplicates
+            if (
+                title
+                and url
+                and should_include_job(title, location)
+                and url not in found_jobs
+            ):
+                job_data = {
+                    "title": title,
+                    "url": url,
+                }
+                if location:
+                    job_data["location"] = location
+
+                jobs.append(job_data)
+
+    except Exception as e:
+        print_error(company, f"Error parsing Jobvite response: {e}")
+
+    return jobs
 
 
 def smartrecruiters(company: str, found_jobs: Set[str]) -> List[Dict]:
