@@ -1066,4 +1066,18 @@ def github(found_jobs: Set[str]) -> List[Dict]:
     return []
 
 
+def ebay(found_jobs: Set[str]) -> List[Dict]:
+    """
+    Custom scraper for eBay.
+
+    Args:
+        found_jobs: Set containing URLs of previously found listings
+
+    Returns:
+        A list of new job listings for that company
+    """
+    print("🚧 EBAY SCRAPER NOT YET IMPLEMENTED 🚧")
+    return []
+
+
 # --------------------------------------------
