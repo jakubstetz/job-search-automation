@@ -85,6 +85,7 @@ tier_2a = [
     # https://careers-githubinc.icims.com/
     {"name": "GitHub", "formatted_name": "githubinc", "scraper": icims},
     {"name": "Affirm", "formatted_name": "affirm", "scraper": greenhouse},
+    {"name": "Rubrik", "formatted_name": "rubrik", "scraper": greenhouse},
 ]
 
 tier_2b = [
@@ -114,6 +115,7 @@ tier_2b = [
     {"name": "Freshworks", "formatted_name": "freshworks", "scraper": smartrecruiters},
     # https://redhat.wd5.myworkdayjobs.com/Jobs
     {"name": "Red Hat", "formatted_name": "redhat", "scraper": myworkdayjobs},
+    {"name": "RunPod", "formatted_name": "runpod", "scraper": greenhouse},
 ]
 
 tier_2c = [
@@ -151,4 +153,6 @@ tier_2c = [
     },
     {"name": "L3Harris", "formatted_name": "l3harris", "scraper": nc2},
     {"name": "Mattermost", "formatted_name": "mattermost", "scraper": greenhouse},
+    {"name": "Canonical", "formatted_name": "canonical", "scraper": greenhouse},
+    {"name": "Zest AI", "formatted_name": "zestai", "scraper": greenhouse},
 ]
