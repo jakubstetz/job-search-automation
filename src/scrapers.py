@@ -481,108 +481,6 @@ def uber(found_jobs: Set[str]) -> List[Dict]:
     return jobs
 
 
-def servicenow(found_jobs: Set[str]) -> List[Dict]:
-    """
-    Custom scraper for ServiceNow.
-
-    Args:
-        found_jobs: Set containing URLs of previously found listings
-
-    Returns:
-        A list of new job listings for that company
-    """
-    jobs = []
-    base_url = "https://careers.smartrecruiters.com/ServiceNow/"
-    search_query = "?search=software%20engineer"
-
-    current_page = 1
-    max_pages = 20  # Reasonable limit for HTML scraping
-
-    print_debug("Scraping ServiceNow custom API")
-
-    while current_page <= max_pages:
-        # SmartRecruiters uses page parameter for pagination
-        if current_page == 1:
-            api_url = base_url + search_query
-        else:
-            api_url = base_url + search_query + f"&page={current_page}"
-
-        print_debug(f"Fetching ServiceNow page {current_page}")
-
-        response = make_request(api_url)
-        if not response or response.status_code != 200:
-            print_error(
-                "ServiceNow",
-                f"Failed to fetch ServiceNow jobs (status: {response.status_code if response else 'None'})",
-            )
-            break
-
-        try:
-            soup = BeautifulSoup(response.content, "html.parser")
-            job_postings = soup.find_all(
-                "li", attrs={"class": "opening-job job column wide-7of16 medium-1of2"}
-            )
-
-            # If no jobs found on this page, we've reached the end
-            if not job_postings:
-                print_debug(
-                    f"No more ServiceNow jobs found after {current_page - 1} pages"
-                )
-                break
-
-            page_jobs_found = 0
-            for posting in job_postings:
-                title_elem = posting.find("h4")
-                url_elem = posting.find("a")
-                location_elem = posting.find("span", class_="job-location")
-
-                if title_elem and url_elem:
-                    title = title_elem.get_text(strip=True)
-                    url = url_elem["href"]
-                    location = (
-                        location_elem.get_text(strip=True) if location_elem else ""
-                    )
-
-                    # Apply filtering and check for duplicates
-                    if should_include_job(title, location) and url not in found_jobs:
-                        job_data = {
-                            "title": title,
-                            "url": url,
-                        }
-                        if location:
-                            job_data["location"] = location
-
-                        jobs.append(job_data)
-                        page_jobs_found += 1
-
-            print_debug(
-                f"Found {page_jobs_found} new ServiceNow jobs on page {current_page}"
-            )
-
-            # If no new jobs found on this page, we've likely reached the end
-            if page_jobs_found == 0:
-                print_debug(
-                    f"No new ServiceNow jobs found on page {current_page}, stopping pagination"
-                )
-                break
-
-            current_page += 1
-
-            # Additional sleep between pages to be respectful
-            if current_page <= max_pages:
-                print_debug("Sleeping briefly between ServiceNow pages...")
-                time.sleep(REQUEST_DELAY_SECONDS)
-
-        except Exception as e:
-            print_error("ServiceNow", f"Error parsing ServiceNow response: {e}")
-            break
-
-    print_debug(
-        f"ServiceNow pagination complete: {len(jobs)} total new jobs found across {current_page - 1} pages"
-    )
-    return jobs
-
-
 # --------------------------------------------
 # NOT YET IMPLEMENTED
 # --------------------------------------------
@@ -802,8 +700,97 @@ def smartrecruiters(company: str, found_jobs: Set[str]) -> List[Dict]:
     Returns:
         A list of new job listings for that company
     """
-    print("🚧 SMARTRECRUITERS SCRAPER NOT YET IMPLEMENTED 🚧")
-    return []
+    jobs = []
+    base_url = f"https://careers.smartrecruiters.com/{company}/"
+
+    current_page = 1
+    max_pages = 20  # Reasonable limit for HTML scraping
+
+    print_debug(f"Scraping SmartRecruiters for {company}")
+
+    while current_page <= max_pages:
+        # SmartRecruiters uses page parameter for pagination
+        if current_page == 1:
+            api_url = base_url
+        else:
+            api_url = base_url + f"&page={current_page}"
+
+        print_debug(f"Fetching {company} SmartRecruiters page {current_page}")
+
+        response = make_request(api_url)
+        if not response or response.status_code != 200:
+            print_error(
+                company,
+                f"Failed to fetch SmartRecruiters jobs (status: {response.status_code if response else 'None'})",
+            )
+            break
+
+        try:
+            soup = BeautifulSoup(response.content, "html.parser")
+            job_postings = soup.find_all(
+                "li", attrs={"class": "opening-job job column wide-7of16 medium-1of2"}
+            )
+
+            # If no jobs found on this page, we've reached the end
+            if not job_postings:
+                print_debug(
+                    f"No more {company} SmartRecruiters jobs found after {current_page - 1} pages"
+                )
+                break
+
+            page_jobs_found = 0
+            for posting in job_postings:
+                title_elem = posting.find("h4")
+                url_elem = posting.find("a")
+                location_elem = posting.find("span", class_="job-location")
+
+                if title_elem and url_elem:
+                    title = title_elem.get_text(strip=True)
+                    url = url_elem["href"]
+                    location = (
+                        location_elem.get_text(strip=True) if location_elem else ""
+                    )
+
+                    # Apply filtering and check for duplicates
+                    if should_include_job(title, location) and url not in found_jobs:
+                        job_data = {
+                            "title": title,
+                            "url": url,
+                        }
+                        if location:
+                            job_data["location"] = location
+
+                        jobs.append(job_data)
+                        page_jobs_found += 1
+
+            print_debug(
+                f"Found {page_jobs_found} new {company} SmartRecruiters jobs on page {current_page}"
+            )
+
+            # If no new jobs found on this page, we've likely reached the end
+            if page_jobs_found == 0:
+                print_debug(
+                    f"No new {company} SmartRecruiters jobs found on page {current_page}, stopping pagination"
+                )
+                break
+
+            current_page += 1
+
+            # Additional sleep between pages to be respectful
+            if current_page <= max_pages:
+                print_debug(
+                    f"Sleeping briefly between {company} SmartRecruiters pages..."
+                )
+                time.sleep(REQUEST_DELAY_SECONDS)
+
+        except Exception as e:
+            print_error(company, f"Error parsing SmartRecruiters response: {e}")
+            break
+
+    print_debug(
+        f"{company} SmartRecruiters pagination complete: {len(jobs)} total new jobs found across {current_page - 1} pages"
+    )
+    return jobs
 
 
 def avature(company: str, found_jobs: Set[str]) -> List[Dict]:
