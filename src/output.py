@@ -4,7 +4,7 @@ Output formatting and logging utilities for job scraper.
 
 from datetime import datetime
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Set
 
 # Ensure search_results directories exist
 SEARCH_RESULTS_DIR = Path(__file__).parent / "search_results"
@@ -32,8 +32,13 @@ def log_to_files(company: str, job_line: str, url: str) -> None:
         f.write("\n")
 
 
-def print_summary(jobs_found: Dict[str, List[Dict]]) -> None:
+def print_summary(
+    jobs_found: Dict[str, List[Dict]], new_companies: Set[str] = None
+) -> None:
     """Print a summary of jobs found across all companies."""
+    if not new_companies:
+        new_companies = set()
+
     print("\n" + "=" * 60)
     print("SCRAPING SUMMARY")
     print("=" * 60)
@@ -53,13 +58,19 @@ def print_summary(jobs_found: Dict[str, List[Dict]]) -> None:
     print(f"Companies with jobs: {companies_with_jobs}")
 
     # Create summary log file
-    create_summary_log(jobs_found, total_jobs, companies_with_jobs)
+    create_summary_log(jobs_found, total_jobs, companies_with_jobs, new_companies)
 
 
 def create_summary_log(
-    jobs_found: Dict[str, List[Dict]], total_jobs: int, companies_with_jobs: int
+    jobs_found: Dict[str, List[Dict]],
+    total_jobs: int,
+    companies_with_jobs: int,
+    new_companies: Set[str] = None,
 ) -> None:
     """Create a summary log file with all jobs found in this run."""
+    if not new_companies:
+        new_companies = set()
+
     timestamp = datetime.now().strftime("%Y-%m-%d_%H:%M")
     summary_file = BY_SCRAPE_DIR / f"{timestamp}.txt"
 
@@ -75,6 +86,13 @@ def create_summary_log(
         for company, jobs in jobs_found.items():
             if jobs:
                 f.write(f"\n{company} ({len(jobs)} jobs):\n")
+
+                # Add warning for new companies
+                if company in new_companies:
+                    f.write(
+                        f"!!! {company.upper()} JOBS BEING SCRAPED FOR THE FIRST TIME - MAY NOT BE MOST RECENT !!!\n"
+                    )
+
                 f.write("-" * 40 + "\n")
 
                 for job in jobs:

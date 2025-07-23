@@ -3,8 +3,38 @@ Shared utility functions for the job scraper.
 """
 
 from pathlib import Path
-from typing import Set, List
+from typing import Set, List, Dict
 from config import INCLUDE_KEYWORDS, EXCLUDE_KEYWORDS
+
+
+def get_new_companies(all_companies: List[Dict]) -> Set[str]:
+    """
+    Determine which companies are being scraped for the first time.
+
+    Args:
+        all_companies: List of all company dictionaries from all tiers
+
+    Returns:
+        Set of company names that don't have existing log files
+    """
+    from output import BY_COMPANY_DIR  # Import here to avoid circular imports
+
+    new_companies = set()
+
+    for company_data in all_companies:
+        company_name = company_data.get("name", "")
+        if not company_name:
+            continue
+
+        # Create safe filename from company name (same logic as in log_to_files)
+        safe_company_name = company_name.lower().replace(" ", "_").replace("-", "_")
+        log_file = BY_COMPANY_DIR / f"{safe_company_name}.txt"
+
+        # If log file doesn't exist, this is a new company
+        if not log_file.exists():
+            new_companies.add(company_name)
+
+    return new_companies
 
 
 def load_found_jobs() -> Set[str]:

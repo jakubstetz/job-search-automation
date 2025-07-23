@@ -11,7 +11,7 @@ from collections import defaultdict
 
 from companies import tier_1a, tier_1b, tier_2a, tier_2b, tier_2c
 from output import log_to_files, print_summary, print_error
-from utils import load_found_jobs, save_new_jobs
+from utils import load_found_jobs, save_new_jobs, get_new_companies
 from config import (
     OUTPUT_TO_CONSOLE,
     OUTPUT_TO_FILES_BY_COMPANY,
@@ -131,6 +131,18 @@ def main():
         ("Tier 2C", tier_2c),
     ]
 
+    # Get all companies across all tiers to check for new ones
+    all_companies = []
+    for _, tier_companies in tiers:
+        all_companies.extend(tier_companies)
+
+    # Identify companies being scraped for the first time
+    new_companies = get_new_companies(all_companies)
+    if new_companies:
+        print("New companies detected (first-time scrape):")
+        for company in new_companies:
+            print(f"  - {company}")
+
     # Scrape each tier and extend list of newly discovered jobs
     all_results = defaultdict(list)  # New listings stored by company
     all_new_jobs = []  # URLs for all newly discoverd listings
@@ -149,7 +161,7 @@ def main():
         print(f"\nSaving newly discovered job URLs to jobs_found.txt...")
         save_new_jobs(all_new_jobs)
 
-    print_summary(all_results)
+    print_summary(all_results, new_companies)
 
     process_time = (datetime.now() - start_time).total_seconds()
     print(f"\nJob Scraper Completed - {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
