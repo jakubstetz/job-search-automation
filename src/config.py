@@ -127,6 +127,10 @@ MYWORKDAYJOBS_URL_DETAILS = {
         "datacenter_id": "5",
         "final_path_segment": "X",
     },
+    "workday": {
+        "datacenter_id": "5",
+        "final_path_segment": "Workday",
+    },
 }
 
 # Output configuration
