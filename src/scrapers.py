@@ -633,6 +633,10 @@ def icims(company: str, found_jobs: Set[str]) -> List[Dict]:
     """
     Scraper for iCIMS platform.
 
+    Note:
+    Many companies that use iCIMS don't have a centralized "view all jobs" page.
+    These companies have custom scrapers implemented for them.
+
     Args:
         company: Name of company, already formatted for immediate use
         found_jobs: Set containing URLs of previously found listings

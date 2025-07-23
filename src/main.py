@@ -19,7 +19,16 @@ from config import (
     INCLUDE_KEYWORDS,
     EXCLUDE_KEYWORDS,
 )
-from scrapers import lever, greenhouse, ashby, myworkdayjobs, myworkdaysite
+from scrapers import (
+    lever,
+    greenhouse,
+    ashby,
+    myworkdayjobs,
+    myworkdaysite,
+    smartrecruiters,
+    jobvite,
+    icims,
+)
 
 
 def scrape_tier(
@@ -64,6 +73,7 @@ def scrape_tier(
                 myworkdaysite,
                 smartrecruiters,
                 jobvite,
+                icims,
             ]:
                 jobs = scraper(formatted_name, found_jobs)
             else:

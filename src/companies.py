@@ -24,6 +24,8 @@ from scrapers import (
     qualcomm,
     linkedin,
     peloton,
+    atlassian,
+    github,
 )
 
 tier_1a = [
@@ -82,16 +84,16 @@ tier_2a = [
         "scraper": greenhouse,
     },
     {"name": "Cohere", "formatted_name": "cohere", "scraper": ashby},
-    # https://careers-githubinc.icims.com/
-    {"name": "GitHub", "formatted_name": "githubinc", "scraper": icims},
+    # https://www.github.careers/careers-home/jobs?page=2
+    {"name": "GitHub", "formatted_name": "githubinc", "scraper": github},
     {"name": "Affirm", "formatted_name": "affirm", "scraper": greenhouse},
     {"name": "Rubrik", "formatted_name": "rubrik", "scraper": greenhouse},
 ]
 
 tier_2b = [
     {"name": "AirBnB", "formatted_name": "airbnb", "scraper": greenhouse},
-    # https://globalcareers-atlassian.icims.com/
-    {"name": "Atlassian", "formatted_name": "apac-atlassian", "scraper": icims},
+    # https://www.atlassian.com/company/careers/all-jobs
+    {"name": "Atlassian", "formatted_name": "apac-atlassian", "scraper": atlassian},
     {"name": "Twilio", "formatted_name": "twilio", "scraper": greenhouse},
     # https://zillow.wd5.myworkdayjobs.com/Zillow_Group_External
     {"name": "Zillow", "formatted_name": "zillow", "scraper": myworkdayjobs},
@@ -131,13 +133,12 @@ tier_2c = [
     {"name": "GrubHub", "formatted_name": "grubhub", "scraper": myworkdaysite},
     {"name": "HubSpot", "formatted_name": "hubspot", "scraper": hubspot},
     {"name": "Eventbrite", "formatted_name": "eventbriteinc", "scraper": greenhouse},
-    # uscareers-yelp.icims.com/
-    {"name": "Yelp", "formatted_name": "yelp", "scraper": icims},
+    # https://uscareers-yelp.icims.com/jobs/search?ss=1
+    {"name": "Yelp", "formatted_name": "uscareers-yelp", "scraper": icims},
     {"name": "IBM", "formatted_name": "ibm", "scraper": avature},
     # https://gartner.wd5.myworkdayjobs.com/en-US/ext
     {"name": "Gartner", "formatted_name": "gartner", "scraper": myworkdayjobs},
-    # https://careers-riverbed.icims.com/
-    {"name": "Riverbed", "formatted_name": "riverbed", "scraper": icims},
+    {"name": "Riverbed", "formatted_name": "careers-riverbed", "scraper": icims},
     {"name": "Deloitte", "formatted_name": "deloitte", "scraper": deloitte},
     # https://globalhr.wd5.myworkdayjobs.com/REC_RTX_Ext_Gateway
     {
