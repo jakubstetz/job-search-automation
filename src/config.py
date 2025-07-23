@@ -6,11 +6,13 @@ TIMEOUT_SECONDS = 10  # Request timeout
 
 # Keywords to include in job searches
 INCLUDE_KEYWORDS = [
-    # The first three terms here are expected to catch all relevant jobs
+    # The first four terms here are expected to catch all relevant jobs
     # Therefore they are frontloaded, to speed up scraping script
     "Engineer",
     "Developer",
     "Software",
+    "MTS",
+    "Technical Staff"
     # The remaining terms are unneeded but may help catch any oddball job titles
     "Backend",
     "Stack",  # Covers various spellings of full-stack
@@ -21,6 +23,7 @@ INCLUDE_KEYWORDS = [
     "Web",
     "Infrastructure",
     "DevOps",
+    "Systems",
     "Reliability",  # e.g. Site Reliability Engineer
     "Platform",  # e.g. Platform Engineer
     "Data",
@@ -69,6 +72,7 @@ EXCLUDE_KEYWORDS = [
     "Design",
     "Firmware",
     "Control Systems",
+    "Conductor",
     "Electrical",
     "Mechanical",
     "FGPA",
