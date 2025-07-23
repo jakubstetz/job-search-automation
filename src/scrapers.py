@@ -1080,4 +1080,18 @@ def ebay(found_jobs: Set[str]) -> List[Dict]:
     return []
 
 
+def tiktok(found_jobs: Set[str]) -> List[Dict]:
+    """
+    Custom scraper for TikTok.
+
+    Args:
+        found_jobs: Set containing URLs of previously found listings
+
+    Returns:
+        A list of new job listings for that company
+    """
+    print("🚧 TIKTOK SCRAPER NOT YET IMPLEMENTED 🚧")
+    return []
+
+
 # --------------------------------------------
