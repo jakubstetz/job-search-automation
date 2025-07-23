@@ -1030,4 +1030,32 @@ def linkedin(found_jobs: Set[str]) -> List[Dict]:
     return []
 
 
+def atlassian(found_jobs: Set[str]) -> List[Dict]:
+    """
+    Custom scraper for Atlassian.
+
+    Args:
+        found_jobs: Set containing URLs of previously found listings
+
+    Returns:
+        A list of new job listings for that company
+    """
+    print("🚧 ATLASSIAN SCRAPER NOT YET IMPLEMENTED 🚧")
+    return []
+
+
+def github(found_jobs: Set[str]) -> List[Dict]:
+    """
+    Custom scraper for GitHub.
+
+    Args:
+        found_jobs: Set containing URLs of previously found listings
+
+    Returns:
+        A list of new job listings for that company
+    """
+    print("🚧 GITHUB SCRAPER NOT YET IMPLEMENTED 🚧")
+    return []
+
+
 # --------------------------------------------
