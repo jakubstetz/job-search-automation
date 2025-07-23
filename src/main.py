@@ -56,7 +56,14 @@ def scrape_tier(
         print(f"\n{'- '*30}")
         try:
             # formatted_name not needed for custom scrapers
-            if scraper in [lever, greenhouse, ashby, myworkdayjobs, myworkdaysite]:
+            if scraper in [
+                lever,
+                greenhouse,
+                ashby,
+                myworkdayjobs,
+                myworkdaysite,
+                smartrecruiters,
+            ]:
                 jobs = scraper(formatted_name, found_jobs)
             else:
                 jobs = scraper(found_jobs)
