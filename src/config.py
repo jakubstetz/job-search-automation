@@ -123,6 +123,10 @@ MYWORKDAYJOBS_URL_DETAILS = {
         "datacenter_id": "5",
         "final_path_segment": "NVIDIAExternalCareerSite",
     },
+    "x": {
+        "datacenter_id": "5",
+        "final_path_segment": "X",
+    },
 }
 
 # Output configuration
