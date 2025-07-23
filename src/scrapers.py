@@ -769,6 +769,7 @@ def smartrecruiters(company: str, found_jobs: Set[str]) -> List[Dict]:
         A list of new job listings for that company
     """
     jobs = []
+    current_run_urls = set()  # Track URLs found in this run to prevent duplicates
     base_url = f"https://careers.smartrecruiters.com/{company}/"
 
     current_page = 1
@@ -819,8 +820,12 @@ def smartrecruiters(company: str, found_jobs: Set[str]) -> List[Dict]:
                         location_elem.get_text(strip=True) if location_elem else ""
                     )
 
-                    # Apply filtering and check for duplicates
-                    if should_include_job(title, location) and url not in found_jobs:
+                    # Apply filtering and check for duplicates (both previous runs and current run)
+                    if (
+                        should_include_job(title, location)
+                        and url not in found_jobs
+                        and url not in current_run_urls
+                    ):
                         job_data = {
                             "title": title,
                             "url": url,
@@ -829,6 +834,9 @@ def smartrecruiters(company: str, found_jobs: Set[str]) -> List[Dict]:
                             job_data["location"] = location
 
                         jobs.append(job_data)
+                        current_run_urls.add(
+                            url
+                        )  # Track this URL to prevent duplicates in same run
                         page_jobs_found += 1
 
             print_debug(
