@@ -395,7 +395,6 @@ def uber(found_jobs: Set[str]) -> List[Dict]:
                 "department": [
                     "Engineering",
                 ],
-                "query": "software engineer",
             },
             "page": current_page,
             "limit": page_size,
@@ -508,7 +507,7 @@ def myworkdayjobs(company: str, found_jobs: Set[str]) -> List[Dict]:
     datacenter_id = config["datacenter_id"]
     final_path_segment = config["final_path_segment"]
 
-    # Construct the API endpoint URL (discovered pattern)
+    # Construct the API endpoint URL
     api_url = f"https://{company}.wd{datacenter_id}.myworkdayjobs.com/wday/cxs/{company}/{final_path_segment}/jobs"
     base_url = (
         f"https://{company}.wd{datacenter_id}.myworkdayjobs.com/{final_path_segment}"
@@ -518,7 +517,7 @@ def myworkdayjobs(company: str, found_jobs: Set[str]) -> List[Dict]:
 
     page_size = 20
     current_offset = 0
-    max_pages = 20  # Workday sites can have many jobs, so higher limit
+    max_pages = 80  # Workday sites can have many jobs, so higher limit
     pages_fetched = 0
 
     headers = {
@@ -529,6 +528,7 @@ def myworkdayjobs(company: str, found_jobs: Set[str]) -> List[Dict]:
 
     while pages_fetched < max_pages:
         # Workday API parameters
+        # No filters used since different Workday-using companies have different filters on their job boards
         search_params = {
             "appliedFacets": {},
             "limit": page_size,

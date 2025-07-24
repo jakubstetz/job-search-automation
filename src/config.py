@@ -119,7 +119,7 @@ MYWORKDAYJOBS_URL_DETAILS = {
     "capitalone": {"datacenter_id": "12", "final_path_segment": "Capital_One"},
     "zillow": {"datacenter_id": "5", "final_path_segment": "Zillow_Group_External"},
     "etsy": {"datacenter_id": "5", "final_path_segment": "Etsy_Careers"},
-    "cohesity": {"datacenter_id": "5", "final_path_segment": "Cohesity_Careers/"},
+    "cohesity": {"datacenter_id": "5", "final_path_segment": "Cohesity_Careers"},
     "thoughtspot": {"datacenter_id": "5", "final_path_segment": "careers"},
     "redhat": {"datacenter_id": "5", "final_path_segment": "Jobs"},
     "gartner": {"datacenter_id": "5", "final_path_segment": "en-US/ext"},
