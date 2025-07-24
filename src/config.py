@@ -64,6 +64,9 @@ EXCLUDE_KEYWORDS = [
     "Head",
     "Chief",
     "Sr",
+    "VP",
+    "CTO",
+    "President",
     # Filter out roles in areas that are definitely out of scope
     "Ambassador",
     "Recruit",
@@ -135,7 +138,7 @@ MYWORKDAYJOBS_URL_DETAILS = {
         "datacenter_id": "5",
         "final_path_segment": "NVIDIAExternalCareerSite",
     },
-    "x": {
+    "twitter": {  # X
         "datacenter_id": "5",
         "final_path_segment": "X",
     },
