@@ -95,7 +95,7 @@ tier_1b = [
         "formatted_name": "netflix",
         "scraper": netflix,
         "job_board_link": "",
-        "manually_verified": False,
+        "manually_verified": True,
     },
     {
         "name": "OpenAI",

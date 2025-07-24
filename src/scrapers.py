@@ -234,15 +234,17 @@ def netflix(found_jobs: Set[str]) -> List[Dict]:
         A list of new job listings for that company
     """
     jobs = []
-    page_size = 50
+    # Netflix API hardcodes 10 jobs per request — this can't be changed using parameters
+    page_size = 10
     start = 0
-    max_pages = 20  # Reasonable limit to prevent infinite loops
+    # Netflix had ~546 jobs at the time of development
+    max_pages = 80
     pages_fetched = 0
 
     print_debug("Scraping Netflix custom API")
 
     while pages_fetched < max_pages:
-        api_url = f"https://explore.jobs.netflix.net/api/apply/v2/jobs?domain=netflix.com&start={start}&num={page_size}&query=Software%20Engineer&sort_by=relevance"
+        api_url = f"https://explore.jobs.netflix.net/api/apply/v2/jobs?domain=netflix.com&start={start}"
 
         print_debug(f"Fetching Netflix page {pages_fetched + 1} (start={start})")
 
@@ -257,6 +259,7 @@ def netflix(found_jobs: Set[str]) -> List[Dict]:
         try:
             data = response.json()
             job_listings = data.get("positions", [])
+            total_count = data.get("count", 0)  # Total jobs available
 
             # If no jobs returned, we've reached the end
             if not job_listings:
@@ -282,7 +285,7 @@ def netflix(found_jobs: Set[str]) -> List[Dict]:
                     page_jobs_found += 1
 
             print_debug(
-                f"Found {page_jobs_found} new Netflix jobs on page {pages_fetched + 1}"
+                f"Found {page_jobs_found} new Netflix jobs on page {pages_fetched + 1} (total available: {total_count})"
             )
 
             # If we got fewer jobs than requested, we've likely reached the end
@@ -292,6 +295,7 @@ def netflix(found_jobs: Set[str]) -> List[Dict]:
                 )
                 break
 
+            # Increment by actual number of jobs returned (always 10 for Netflix)
             start += page_size
             pages_fetched += 1
 
