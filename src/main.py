@@ -56,10 +56,16 @@ def scrape_tier(
         company_name = company_data.get("name", "")
         formatted_name = company_data.get("formatted_name", "")
         scraper = company_data.get("scraper", "")
+        manually_verified = company_data.get("manually_verified", False)
 
         # Skip companies without scrapers configured
         if not scraper:
             print_debug(f"No scraper configured for {company_name}")
+            continue
+
+        # Skip companies that haven't been manually verified
+        if not manually_verified:
+            print(f"⚠️  Skipping {company_name} - scraper not manually verified")
             continue
 
         print(f"\n{'- '*30}")
