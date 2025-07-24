@@ -13,26 +13,52 @@ from utils import should_include_job
 from output import print_debug, print_error
 
 
-def make_request(url: str, **kwargs) -> Optional[requests.Response]:
-    """Make a request with timeout and error handling."""
-    try:
-        response = requests.get(url, timeout=TIMEOUT_SECONDS, **kwargs)
-        time.sleep(REQUEST_DELAY_SECONDS)  # Rate limiting
-        return response
-    except requests.exceptions.RequestException as e:
-        print_debug(f"Request failed for {url}: {e}")
-        return None
+def make_request(
+    url: str, max_retries: int = 3, **kwargs
+) -> Optional[requests.Response]:
+    """Make a request with timeout, error handling, and retries."""
+    for attempt in range(max_retries):
+        try:
+            response = requests.get(url, timeout=TIMEOUT_SECONDS, **kwargs)
+            time.sleep(REQUEST_DELAY_SECONDS)  # Rate limiting
+            return response
+        except requests.exceptions.RequestException as e:
+            if attempt == max_retries - 1:  # Last attempt
+                print_debug(
+                    f"Request failed for {url} after {max_retries} attempts: {e}"
+                )
+                return None
+            else:
+                print_debug(
+                    f"Request attempt {attempt + 1} failed for {url}: {e}, retrying..."
+                )
+                # Brief exponential backoff before retry
+                time.sleep(REQUEST_DELAY_SECONDS * (2**attempt))
+    return None
 
 
-def make_post_request(url: str, **kwargs) -> Optional[requests.Response]:
-    """Make a POST request with timeout and error handling."""
-    try:
-        response = requests.post(url, timeout=TIMEOUT_SECONDS, **kwargs)
-        time.sleep(REQUEST_DELAY_SECONDS)  # Rate limiting
-        return response
-    except requests.exceptions.RequestException as e:
-        print_debug(f"POST request failed for {url}: {e}")
-        return None
+def make_post_request(
+    url: str, max_retries: int = 3, **kwargs
+) -> Optional[requests.Response]:
+    """Make a POST request with timeout, error handling, and retries."""
+    for attempt in range(max_retries):
+        try:
+            response = requests.post(url, timeout=TIMEOUT_SECONDS, **kwargs)
+            time.sleep(REQUEST_DELAY_SECONDS)  # Rate limiting
+            return response
+        except requests.exceptions.RequestException as e:
+            if attempt == max_retries - 1:  # Last attempt
+                print_debug(
+                    f"POST request failed for {url} after {max_retries} attempts: {e}"
+                )
+                return None
+            else:
+                print_debug(
+                    f"POST request attempt {attempt + 1} failed for {url}: {e}, retrying..."
+                )
+                # Brief exponential backoff before retry
+                time.sleep(REQUEST_DELAY_SECONDS * (2**attempt))
+    return None
 
 
 # --------------------------------------------
