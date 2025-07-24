@@ -351,7 +351,7 @@ def spotify(found_jobs: Set[str]) -> List[Dict]:
         A list of new job listings for that company
     """
     jobs = []
-    api_url = "https://api-dot-new-spotifyjobs-com.nw.r.appspot.com/wp-json/animal/v1/job/search?c=engineering"
+    api_url = "https://api-dot-new-spotifyjobs-com.nw.r.appspot.com/wp-json/animal/v1/job/search"
     listing_url_template = "https://www.lifeatspotify.com/jobs/{}"
 
     print_debug("Scraping Spotify custom API")
@@ -421,11 +421,7 @@ def uber(found_jobs: Set[str]) -> List[Dict]:
 
     while current_page < max_pages:
         json_data = {
-            "params": {
-                "department": [
-                    "Engineering",
-                ],
-            },
+            "params": {},
             "page": current_page,
             "limit": page_size,
         }

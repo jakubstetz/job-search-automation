@@ -161,7 +161,7 @@ tier_2a = [
         "formatted_name": "spotify",
         "scraper": spotify,
         "job_board_link": "https://www.lifeatspotify.com/jobs",
-        "manually_verified": False,  # 30 out of 76
+        "manually_verified": True,
     },
     {
         "name": "Roblox",
