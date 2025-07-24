@@ -517,7 +517,9 @@ def myworkdayjobs(company: str, found_jobs: Set[str]) -> List[Dict]:
 
     page_size = 20
     current_offset = 0
-    max_pages = 80  # Workday sites can have many jobs, so higher limit
+    # Workday sites can have many jobs, so higher limit
+    # At the time of development, Raytheon Technologies had ~2600 jobs
+    max_pages = 150
     pages_fetched = 0
 
     headers = {
