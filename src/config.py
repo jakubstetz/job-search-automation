@@ -125,7 +125,7 @@ MYWORKDAYJOBS_URL_DETAILS = {
     "cohesity": {"datacenter_id": "5", "final_path_segment": "Cohesity_Careers"},
     "thoughtspot": {"datacenter_id": "5", "final_path_segment": "careers"},
     "redhat": {"datacenter_id": "5", "final_path_segment": "Jobs"},
-    "gartner": {"datacenter_id": "5", "final_path_segment": "en-US/ext"},
+    "gartner": {"datacenter_id": "5", "final_path_segment": "en-US/EXT"},
     "globalhr": {  # Raytheon Technologies
         "datacenter_id": "5",
         "final_path_segment": "REC_RTX_Ext_Gateway",

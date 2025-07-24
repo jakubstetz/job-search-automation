@@ -692,8 +692,8 @@ tier_2c = [
         "name": "Gartner",
         "formatted_name": "gartner",
         "scraper": myworkdayjobs,
-        "job_board_link": "https://gartner.wd5.myworkdayjobs.com/en-US/ext",
-        "manually_verified": False,  # ERROR scraping gartner: Failed to fetch Workday jobs (status: None)
+        "job_board_link": "https://gartner.wd5.myworkdayjobs.com/EXT",
+        "manually_verified": True,
     },
     {
         "name": "Riverbed",
