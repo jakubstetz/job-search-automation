@@ -4,7 +4,7 @@ Shared utility functions for the job scraper.
 
 from pathlib import Path
 from typing import Set, List, Dict
-from config import INCLUDE_KEYWORDS, EXCLUDE_KEYWORDS
+from config import INCLUDE_KEYWORDS, EXCLUDE_KEYWORDS, APPLY_FILTERING
 
 
 def get_new_companies(all_companies: List[Dict]) -> Set[str]:
@@ -96,6 +96,10 @@ def should_include_job(job_title: str, location: str = "") -> bool:
     Returns:
         True if job satisfies keyword include/exclude and location requirements, False otherwise
     """
+    # If filtering is disabled, accept all jobs
+    if not APPLY_FILTERING:
+        return True
+
     job_title_lower = job_title.lower()
 
     # Must match at least one include keyword

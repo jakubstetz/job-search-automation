@@ -1,5 +1,14 @@
 # Job search configuration
 
+import os
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Filtering configuration
+APPLY_FILTERING = os.getenv("APPLY_FILTERING", "True").lower() == "true"
+
 # Rate limiting configuration
 REQUEST_DELAY_SECONDS = 3  # Delay between requests to be respectful
 TIMEOUT_SECONDS = 10  # Request timeout
@@ -46,6 +55,7 @@ EXCLUDE_KEYWORDS = [
     "IV",
     "V",
     "Experienced",
+    "Distinguished",
     "Principal",
     "Lead",
     "Manager",
@@ -56,6 +66,8 @@ EXCLUDE_KEYWORDS = [
     "Sr",
     # Filter out roles in areas that are definitely out of scope
     "Ambassador",
+    "Recruit",
+    "Sourcer",
     "Solutions Architect",
     "Analyst",
     "Technical Support",
